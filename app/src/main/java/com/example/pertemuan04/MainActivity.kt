@@ -64,36 +64,93 @@ class MainActivity : ComponentActivity() {
 }
 
 @Composable
-fun Greeting(name: String, modifier: Modifier = Modifier) {
-    Text(
-        text = "Hello $name!",
-        modifier = modifier
-    )
+fun TampilLayout(
+    modifier: Modifier = Modifier
+)
+{
+    Card ( modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 5.dp))
+    {
+        Column(
+            verticalArrangement = Arrangement.spacedBy(10.dp),
+            horizontalAlignment = Alignment.CenterHorizontally,
+            modifier = Modifier.padding(20.dp))
+        {
+            TampilForm()
+        }
+    }
 }
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun TextHasil(namanya: String, teleponnya: String, jenisnya: String){
+fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
 
-    ElevatedCard(
-         elevation = CardDefaults.cardElevation(
-             defaultElevation = 6.dp
-         ),
-        modifier = Modifier.fillMaxWidth()
-     ){
+    var textNama by remember { mutableStateOf("")}
+    var textTlp by remember { mutableStateOf("")}
+    var textAlamat by remember { mutableStateOf("") }
+
+
+    val context = LocalContext.current
+    val dataform: Dataform
+    val uiState by cobaViewModel.uiState.collectAsState()
+    dataform = uiState
+
+    OutlinedTextField(
+        value = textNama,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Nama Lengkap")},
+        onValueChange ={
+            textNama = it
+        })
+    OutlinedTextField(
+        value = textTlp,
+        singleLine = true,
+        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Telepon") },
+        onValueChange = {
+            textTlp = it
+        })
+
+    OutlinedTextField(
+        value = textAlamat,
+        singleLine = true,
+        shape = MaterialTheme.shapes.large,
+        modifier = Modifier.fillMaxWidth(),
+        label = { Text(text = "Alamat") },
+        onValueChange = {
+            textAlamat = it
+        }
+    )
+    Button(
+        modifier = Modifier.fillMaxWidth(),
+        onClick =
+        {
+            cobaViewModel.insertData(textNama, textTlp, dataform.sex, textAlamat)
+        }
+    ) {
         Text(
-            text = "Nama : " + namanya,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+            text = stringResource(id = R.string.submit),
+            fontSize = 16.sp
         )
-        Text(
-            text = "Telepon : " + teleponnya,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-        )
-        Text(
-            text = "Jenis Kelamin : " + jenisnya,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
-        )
-     }
+    }
+
+
+    SelectJK(
+        options = jenis.map { id -> context.resources.getString(id)},
+        onSelectionChanged = {cobaViewModel.setJenisK(it)})
+
+    Spacer(modifier = Modifier.height(100.dp))
+    TextHasil(
+        namanya = cobaViewModel.namaUsr,
+        teleponnya = cobaViewModel.noTlp,
+        jenisnya = cobaViewModel.jeniKl,
+        alamatnya = cobaViewModel.almt)
 }
+
 @Composable
 fun SelectJK(
     options: List<String>,
@@ -127,68 +184,32 @@ fun SelectJK(
     }
 }
 
-@OptIn(ExperimentalMaterial3Api::class)
-@Composable
-fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
-
-    var textNama by remember { mutableStateOf("")}
-    var textTlp by remember { mutableStateOf("")}
-
-    val context = LocalContext.current
-    val dataform: Dataform
-    val uiState by cobaViewModel.uiState.collectAsState()
-    dataform = uiState
-
-    OutlinedTextField(value = textNama,
-        singleLine = true,
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = "Nama Lengkap")},
-        onValueChange ={
-            textNama = it
-        })
-    OutlinedTextField(
-        value = textTlp,
-        singleLine = true,
-        keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
-        shape = MaterialTheme.shapes.large,
-        modifier = Modifier.fillMaxWidth(),
-        label = { Text(text = "Telepon") },
-        onValueChange = {
-            textTlp = it
-        }
-    )
-    SelectJK(
-        options = jenis.map { id -> context.resources.getString(id)},
-        onSelectionChanged = {cobaViewModel.setJenisK(it)})
-    Button( modifier = Modifier.fillMaxWidth(),
-        onClick = {
-            cobaViewModel.insertData(textNama, textTlp, dataform.sex)
-        }) {
-        Text(text = stringResource(id =R.string.submit),
-            fontSize = 16.sp)
-
-
-    }
-    Spacer(modifier = Modifier.height(100.dp))
-    TextHasil(namanya = cobaViewModel.namaUsr, teleponnya = cobaViewModel.noTlp, jenisnya = cobaViewModel.jeniKl)
-}
 
 @Composable
-fun TampilLayout(
-    modifier: Modifier = Modifier
-){
-    Card (
-        modifier = modifier,
-        elevation = CardDefaults.cardElevation(defaultElevation = 5.dp)
+fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String){
+
+    ElevatedCard(
+        elevation = CardDefaults.cardElevation(
+            defaultElevation = 6.dp
+        ),
+        modifier = Modifier.fillMaxWidth()
     ){
-        Column(
-            verticalArrangement = Arrangement.spacedBy(10.dp),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            modifier = Modifier.padding(20.dp)
-        ){
-            TampilForm()
-        }
+        Text(
+            text = "Nama : " + namanya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+        Text(
+            text = "Telepon : " + teleponnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
+        )
+        Text(
+            text = "Jenis Kelamin : " + jenisnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
+        Text(
+            text = "Alamat: " + alamatnya,
+            modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
+        )
     }
 }
 
