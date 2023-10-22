@@ -66,8 +66,7 @@ class MainActivity : ComponentActivity() {
 @Composable
 fun TampilLayout(
     modifier: Modifier = Modifier
-)
-{
+) {
     Card ( modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 5.dp))
     {
         Column(
@@ -79,8 +78,6 @@ fun TampilLayout(
         }
     }
 }
-
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
@@ -88,7 +85,6 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     var textNama by remember { mutableStateOf("")}
     var textTlp by remember { mutableStateOf("")}
     var textAlamat by remember { mutableStateOf("") }
-
 
     val context = LocalContext.current
     val dataform: Dataform
@@ -114,7 +110,6 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         onValueChange = {
             textTlp = it
         })
-
     OutlinedTextField(
         value = textAlamat,
         singleLine = true,
@@ -123,42 +118,38 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         label = { Text(text = "Alamat") },
         onValueChange = {
             textAlamat = it
-        }
-    )
+        })
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick =
-        {
-            cobaViewModel.insertData(textNama, textTlp, dataform.sex, textAlamat)
-        }
-    ) {
+        { cobaViewModel.insertData(textNama, textTlp, dataform.sex, textAlamat)})
+    {
         Text(
             text = stringResource(id = R.string.submit),
             fontSize = 16.sp
-        )
-    }
-
+        ) }
 
     SelectJK(
         options = jenis.map { id -> context.resources.getString(id)},
         onSelectionChanged = {cobaViewModel.setJenisK(it)})
 
     Spacer(modifier = Modifier.height(100.dp))
+
     TextHasil(
         namanya = cobaViewModel.namaUsr,
         teleponnya = cobaViewModel.noTlp,
         jenisnya = cobaViewModel.jeniKl,
-        alamatnya = cobaViewModel.almt)
+        alamatnya = cobaViewModel.almt
+    )
 }
 
 @Composable
 fun SelectJK(
     options: List<String>,
-    onSelectionChanged: (String) -> Unit = {}
-){
-    var selectionValue by rememberSaveable { mutableStateOf("") }
-
-    Column (modifier = Modifier.padding(16.dp)) {
+    onSelectionChanged: (String) -> Unit = {})
+{var selectionValue by rememberSaveable { mutableStateOf("") }
+    Column (modifier = Modifier.padding(16.dp))
+    {
         options.forEach { item ->
             Row(
                 modifier = Modifier.selectable(
@@ -166,17 +157,20 @@ fun SelectJK(
                     onClick = {
                         selectionValue = item
                         onSelectionChanged(item)
-                    }
-                ),
+                    }),
+
                 verticalAlignment = Alignment.CenterVertically
+
             ){
                 RadioButton(
                         selected = selectionValue == item,
-                        onClick = {
+                        onClick =
+                        {
                             selectionValue = item
                             onSelectionChanged(item)
                         }
                 )
+
                 Text(item)
             }
         }
@@ -186,13 +180,15 @@ fun SelectJK(
 
 
 @Composable
-fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String){
-
+fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String)
+{
     ElevatedCard(
         elevation = CardDefaults.cardElevation(
             defaultElevation = 6.dp
         ),
+
         modifier = Modifier.fillMaxWidth()
+
     ){
         Text(
             text = "Nama : " + namanya,
