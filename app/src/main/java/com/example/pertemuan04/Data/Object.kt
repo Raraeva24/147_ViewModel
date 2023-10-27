@@ -5,4 +5,8 @@ object Object {
     val jenis = listOf(
         R.string.laki,
         R.string.wanita)
+    val Status = listOf(
+        R.string.menikah,
+        R.string.tdkmenikah
+    )
 }
