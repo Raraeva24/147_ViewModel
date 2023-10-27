@@ -125,6 +125,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
     SelectJK(
         options = jenis.map { id -> context.resources.getString(id)},
         onSelectionChanged = {cobaViewModel.setJenisK(it)})
+
     OutlinedTextField(
         value = textAlamat,
         singleLine = true,
@@ -135,11 +136,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textAlamat = it
         })
 
-
-
-
-
-    Spacer(modifier = Modifier.height(100.dp))
+    Spacer(modifier = Modifier.height(20.dp))
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick =
@@ -150,7 +147,7 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             fontSize = 16.sp
         ) }
 
-    Spacer(modifier = Modifier.height(100.dp))
+    Spacer(modifier = Modifier.height(20.dp))
 
     TextHasil(
         jenisnya = cobaViewModel.jeniKl,
