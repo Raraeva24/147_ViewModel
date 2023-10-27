@@ -121,6 +121,10 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
         onValueChange = {
             textEmail = it
         })
+
+    SelectJK(
+        options = jenis.map { id -> context.resources.getString(id)},
+        onSelectionChanged = {cobaViewModel.setJenisK(it)})
     OutlinedTextField(
         value = textAlamat,
         singleLine = true,
@@ -131,29 +135,26 @@ fun TampilForm(cobaViewModel: CobaViewModel = viewModel()){
             textAlamat = it
         })
 
-    SelectJK(
-        options = jenis.map { id -> context.resources.getString(id)},
-        onSelectionChanged = {cobaViewModel.setJenisK(it)})
+
+
+
 
     Spacer(modifier = Modifier.height(100.dp))
-
     Button(
         modifier = Modifier.fillMaxWidth(),
         onClick =
-        { cobaViewModel.insertData(textNama, textTlp, dataform.sex, textEmail, textAlamat)})
+        { cobaViewModel.insertData(textNama, textTlp, dataform.sex, textEmail, textAlamat, dataform.status)})
     {
         Text(
             text = stringResource(id = R.string.submit),
             fontSize = 16.sp
         ) }
 
-
     Spacer(modifier = Modifier.height(100.dp))
 
     TextHasil(
-        namanya = cobaViewModel.namaUsr,
-        teleponnya = cobaViewModel.noTlp,
         jenisnya = cobaViewModel.jeniKl,
+        statusnya = cobaViewModel.sts,
         alamatnya = cobaViewModel.almt,
         Emailnya = cobaViewModel.emailUsr
     )
@@ -231,7 +232,7 @@ fun SelectSts(
 
 
 @Composable
-fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: String, Emailnya: String)
+fun TextHasil(jenisnya: String, statusnya: String, alamatnya: String, Emailnya: String)
 
 {
     ElevatedCard(
@@ -243,15 +244,11 @@ fun TextHasil(namanya: String, teleponnya: String, jenisnya: String, alamatnya: 
 
     ){
         Text(
-            text = "Nama : " + namanya,
+            text = "Jenis Kelamin : " + jenisnya,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
         )
         Text(
-            text = "Telepon : " + teleponnya,
-            modifier = Modifier.padding(horizontal = 10.dp, vertical = 5.dp)
-        )
-        Text(
-            text = "Jenis Kelamin : " + jenisnya,
+            text = "Status : " + statusnya,
             modifier = Modifier.padding(horizontal = 10.dp, vertical = 4.dp)
         )
         Text(
