@@ -68,7 +68,7 @@ class MainActivity : ComponentActivity() {
 fun TampilLayout(
     modifier: Modifier = Modifier
 ) {
-    Card ( modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 5.dp))
+    Card ( modifier = modifier, elevation = CardDefaults.cardElevation(defaultElevation = 2.dp))
     {
         Column(
             verticalArrangement = Arrangement.spacedBy(10.dp),
